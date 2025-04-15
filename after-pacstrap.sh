@@ -19,43 +19,41 @@ user_setup() {
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 }
 
-build_stepmania() {
-    echo -e "${GREEN}Building StepMania${NC}"
+build_jujube() {
+    echo -e "${GREEN}Building Jujube${NC}"
     begin_checked_section
 
-    git clone --depth=1 https://github.com/stepmania/stepmania.git /stepmania
-    mkdir /stepmania/build
-    pushd /stepmania
+    git clone --depth=1 https://gitlab.com/square-game-liberation-front/jujube.git /jujube
+    mkdir /jujube/build
+    pushd /jujube
     pushd build
-    cmake .. \
-        -DCMAKE_INSTALL_PREFIX=/opt \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DOpenGL_GL_PREFERENCE=GLVND \
-        -DWITH_LTO=ON
+    meson .. \
+        --prefix=/opt \
+        --buildtype=Release \
     local processes=$(($(nproc) + 1))
-    make -j${processes}
+    ninja -j${processes}
     popd
-    cmake --install build --strip
+    meson --install build --strip
     popd
-    rm -rf /stepmania
-    chown -R ${USERNAME}:${USERNAME} /opt/stepmania-5.1/
+    rm -rf /jujube
+    chown -R ${USERNAME}:${USERNAME} /opt/jujube-1.1/
 
     end_checked_section
 }
 
-configure_settings() {
-    echo -e "${GREEN}Setting up configuration files${NC}"
-    begin_checked_section
+# configure_settings() {
+#     echo -e "${GREEN}Setting up configuration files${NC}"
+#     begin_checked_section
 
-    # Set initial configuration for StepMania
-    mkdir -p /opt/stepmania-5.1/Data
-    cat <<EOF >> /opt/stepmania-5.1/Data/Static.ini
-[Options]
-Windowed=0
-EOF
-    chown ${USERNAME}:${USERNAME} /opt/stepmania-5.1/Data/Static.ini
+#     # Set initial configuration for jujube
+#     mkdir -p /opt/stepmania-1.1/Data
+#     cat <<EOF >> /opt/stepmania-1.1/Data/Static.ini
+# [Options]
+# Windowed=0
+# EOF
+#     chown ${USERNAME}:${USERNAME} /opt/stepmania-5.1/Data/Static.ini
 
-    # Run stepmania when `startx` is run
+    # Run jujube when `startx` is run
     cat <<EOF > /home/${USERNAME}/.xinitrc
 #!/bin/sh
 
@@ -66,7 +64,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
   unset f
 fi
 
-exec /opt/stepmania-5.1/stepmania
+exec /opt/jujube-1.1/jujube
 EOF
     chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.xinitrc
 
@@ -214,7 +212,7 @@ while [[ "$1" != "" ]]; do
 done
 
 user_setup
-build_stepmania
+build_jujube
 configure_settings
 timezone_setup
 locale_setup

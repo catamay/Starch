@@ -1,7 +1,7 @@
 # Starch
 
-A minimal Arch Linux installation for running StepMania on dedicated arcade
-cabinets.
+A minimal Arch Linux installation for running jujube on dedicated arcade
+cabinets. Forked from [Starch](https://github.com/root670/Starch)
 
 ## Features
 
@@ -34,7 +34,7 @@ cabinets.
 4. Download, extract, and run the install script to begin installation:
 
 ```
-wget github.com/root670/Starch/archive/master.zip
+wget github.com/catamay/Starch/archive/master.zip
 bsdtar -xf master.zip
 cd Starch-master
 bash install.sh

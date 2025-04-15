@@ -9,7 +9,7 @@ PASSWORD= # Set by user_setup()
 # Main Functions
 #
 user_setup() {
-    password1=$(whiptail --passwordbox "Enter password for user 'stepmania':" 8 50 3>&1 1>&2 2>&3)
+    password1=$(whiptail --passwordbox "Enter password for user 'jujube':" 8 50 3>&1 1>&2 2>&3)
     if ! [[ "$?" == "0" ]]; then installation_canceled; fi
 
     password2=$(whiptail --passwordbox "Confirm password:" 8 50 3>&1 1>&2 2>&3)
