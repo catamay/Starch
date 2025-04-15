@@ -27,11 +27,11 @@ build_jujube() {
     mkdir /jujube/build
     pushd /jujube
     pushd build
-    meson .. \
+    meson setup .. \
         --prefix=/opt \
         --buildtype=Release \
-    local processes=$(($(nproc) + 1))
-    ninja -j${processes}
+
+    ninja 
     popd
     meson --install build --strip
     popd
@@ -41,7 +41,7 @@ build_jujube() {
     end_checked_section
 }
 
-# configure_settings() {
+configure_settings() {
 #     echo -e "${GREEN}Setting up configuration files${NC}"
 #     begin_checked_section
 
