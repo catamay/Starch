@@ -25,9 +25,23 @@ build_jujube() {
 
     git clone --depth=1 https://gitlab.com/square-game-liberation-front/jujube.git /jujube
     git clone --depth=1 https://github.com/bombela/backward-cpp.git /jujube/include/backward-cpp
-    git clone --depth=1 https://aur.archlinux.org/sfml2.git /sfml2
-    pushd /sfml2 
-    makepkg -si
+    git clone --depth=1 --branch 2.5.x https://github.com/SFML/SFML.git /sfml
+
+    mkdir /sfml/build
+    pushd /sfml
+    pushd build
+    cmake -B build -S SFML-2.5.1 -G Ninja \
+      -DCMAKE_INSTALL_PREFIX=/opt/sfml2 \
+      -DSFML_USE_SYSTEM_DEPS=ON \
+      -DSFML_BUILD_EXAMPLES=1 \
+      -DSFML_BUILD_DOC=1 \
+      -DSFML_INSTALL_PKGCONFIG_FILES=1 \
+      -DSFML_PKGCONFIG_INSTALL_PREFIX=/usr/lib/pkgconfig/sfml2
+    ninja -C build
+    ninja -C build doc
+    ninja -C build install
+    popd
+    
     mkdir /jujube/build
     pushd /jujube
     pushd build
@@ -35,6 +49,7 @@ build_jujube() {
         --prefix=/opt \
         --buildtype=Release \
     ninja 
+
     popd
     meson --install build --strip
     popd
