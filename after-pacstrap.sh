@@ -24,19 +24,22 @@ build_jujube() {
     begin_checked_section
 
     git clone --depth=1 https://gitlab.com/square-game-liberation-front/jujube.git /jujube
+    git clone --depth=1 https://github.com/bombela/backward-cpp.git /jujube/include/backward-cpp
+    git clone --depth=1 https://aur.archlinux.org/sfml2.git /sfml2
+    pushd /sfml2 
+    makepkg -si
     mkdir /jujube/build
     pushd /jujube
     pushd build
     meson setup .. \
         --prefix=/opt \
         --buildtype=Release \
-
     ninja 
     popd
     meson --install build --strip
     popd
     rm -rf /jujube
-    chown -R ${USERNAME}:${USERNAME} /opt/jujube-1.1/
+    chown -R ${USERNAME}:${USERNAME} /opt/jujube-0.2.0/
 
     end_checked_section
 }
@@ -64,7 +67,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
   unset f
 fi
 
-exec /opt/jujube-1.1/jujube
+exec /opt/jujube-0.2.0/jujube
 EOF
     chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.xinitrc
 
