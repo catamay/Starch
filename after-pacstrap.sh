@@ -30,7 +30,7 @@ build_jujube() {
     mkdir /sfml/build
     pushd /sfml
     pushd build
-    cmake -B build -S SFML-2.5.1 -G Ninja \
+    cmake -B build -S .. -G Ninja \
       -DCMAKE_INSTALL_PREFIX=/opt/sfml2 \
       -DSFML_USE_SYSTEM_DEPS=ON \
       -DSFML_BUILD_EXAMPLES=1 \
@@ -41,14 +41,14 @@ build_jujube() {
     ninja -C build doc
     ninja -C build install
     popd
-    
+
     mkdir /jujube/build
     pushd /jujube
     pushd build
     meson setup .. \
         --prefix=/opt \
-        --buildtype=Release \
-    ninja 
+        --buildtype=release \
+    ninja -C build
 
     popd
     meson --install build --strip
