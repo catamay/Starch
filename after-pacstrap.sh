@@ -47,8 +47,8 @@ build_jujube() {
     pushd build
     meson setup .. \
         --prefix=/opt \
-        --buildtype=release \
-    ninja -C build
+        --buildtype=release
+    ninja
 
     popd
     meson --install build --strip
